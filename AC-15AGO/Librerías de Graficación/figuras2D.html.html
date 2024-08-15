@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trazado de Figuras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .left-panel {
+            width: 30%;
+            padding: 20px;
+        }
+        .right-panel {
+            width: 65%;
+            padding: 20px;
+            border: 1px solid #000;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        #canvas {
+            border: 1px solid black;
+            width: 100%;
+            height: 100%;
+            background-color: #f0f0f0;
+        }
+        #generateBtn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Trazado de Figuras</h1>
+
+    <div class="container">
+        <!-- Panel Izquierdo -->
+        <div class="left-panel">
+            <!-- Selección de la figura -->
+            <div class="form-group">
+                <label for="figura">Figura:</label>
+                <select id="figura" onchange="mostrarOpciones()">
+                    <option value="triangulo">Triángulo Equilátero</option>
+                    <option value="rectangulo">Rectángulo</option>
+                    <option value="circulo">Círculo</option>
+                    <option value="pentagono">Pentágono Regular</option>
+                </select>
+            </div>
+
+            <!-- Opciones Dinámicas -->
+            <div id="opcionesFigura"></div>
+
+            <!-- Coordenadas -->
+            <div class="form-group">
+                <label for="coordenadas">Coordenadas:</label>
+                <input type="number" id="coordX" placeholder="X">
+                <input type="number" id="coordY" placeholder="Y">
+            </div>
+
+            <!-- Selección de color -->
+            <div class="form-group">
+                <label for="color">Color de Relleno:</label>
+                <input type="color" id="colorRelleno">
+            </div>
+            <div class="form-group">
+                <label for="colorBorde">Color de Borde:</label>
+                <input type="color" id="colorBorde">
+            </div>
+
+            <!-- Botón para generar la figura -->
+            <button id="generateBtn">Generar Figura</button>
+        </div>
+
+        <!-- Panel Derecho (Canvas) -->
+        <div class="right-panel">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+</body>
+</html>
