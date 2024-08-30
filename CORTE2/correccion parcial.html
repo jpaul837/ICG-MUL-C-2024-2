@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <script>
+        class Cartesiana {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+            getX() { return this.x; }
+            getY() { return this.y; }
+        }
+
+        class Polar {
+            constructor(radio, angulo) {
+                this.radio = radio;
+                this.angulo = angulo;
+            }
+            getRadio() { return this.radio; }
+            getAngulo() { return this.angulo; }
+            toCartesiana() {
+                let x = this.radio * Math.cos(this.angulo);
+                let y = this.radio * Math.sin(this.angulo);
+                return new Cartesiana(x, y);
+            }
+        }
+
+        class Vertice {
+            constructor(cartesiana) {
+                this.cartesiana = cartesiana;
+            }
+            getVertice() {
+                return this.cartesiana;
+            }
+        }
