@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polygon Drawer</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h3>Generar Polígono Regular</h3>
+    <label for="nLados">Número de lados:</label>
+    <input type="number" id="nLados" min="3" value="5">
+    <br>
+    <label for="lado">Lado del polígono (L):</label>
+    <input type="number" id="lado" step="0.1" value="50">
+    <br>
+    <label for="apotema">Apotema (opcional):</label>
+    <input type="number" id="apotema" step="0.1">
+    <br>
+    <label for="cx">Coordenada x del centro:</label>
+    <input type="number" id="cx" value="0">
+    <br>
+    <label for="cy">Coordenada y del centro:</label>
+    <input type="number" id="cy" value="0">
+    <br><br>
+    <button onclick="drawPolygon()">Dibujar Polígono</button>
+    <br><br>
+    <canvas id="canvas" width="600" height="600"></canvas>
+
+    <script>
+        class Cartesiana {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+            getX() { return this.x; }
+            getY() { return this.y; }
+        }
+
+        class Vertice {
+            constructor(cartesiana) {
+                this.cartesiana = cartesiana;
+            }
+            getVertice() {
+                return this.cartesiana;
+            }
+        }
+
+        // Función para generar los vértices del polígono sin rotarlo
+        function polygon(n, L, cx, cy) {
+            const vertices = [];
+            const angleIncrement = 2 * Math.PI / n;
+            const radius = L / (2 * Math.sin(Math.PI / n)); // Radio del círculo circunscrito al polígono
+
+            for (let i = 0; i < n; i++) {
+                const angle = i * angleIncrement;
+                const x = cx + radius * Math.cos(angle); // Solo se desplaza según cx, cy
+                const y = cy + radius * Math.sin(angle);
+                vertices.push(new Vertice(new Cartesiana(x, y)));
+            }
+            return vertices;
+        }
+
+        function drawPolygon() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const n = parseInt(document.getElementById('nLados').value);
+            const L = parseFloat(document.getElementById('lado').value);
+            const cx = parseFloat(document.getElementById('cx').value);
+            const cy = parseFloat(document.getElementById('cy').value);
+
+            // Limpiar el canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Calcular los vértices del polígono
+            const vertices = polygon(n, L, cx, cy);
+
+            // Trasladar el origen al centro del canvas
+            const offsetX = canvas.width / 2;
+            const offsetY = canvas.height / 2;
+
+            // Dibujar el polígono
+            ctx.beginPath();
+            const firstVertice = vertices[0].getVertice();
+            ctx.moveTo(firstVertice.getX() + offsetX, -firstVertice.getY() + offsetY); // Ajustar al origen del canvas
+
+            for (let i = 1; i < vertices.length; i++) {
+                const vertice = vertices[i].getVertice();
+                ctx.lineTo(vertice.getX() + offsetX, -vertice.getY() + offsetY);
+            }
+
+            ctx.closePath();
+            ctx.stroke();
+        }
+    </script>
+</body>
+</html>
