@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<body>
+    <h3>Generar Polígono Regular</h3>
+    <label for="nLados">Número de lados:</label>
+    <input type="number" id="nLados" min="3" value="5">
+    <br>
+    <label for="lado">Lado del polígono (L):</label>
+    <input type="number" id="lado" step="0.1" value="50">
+    <br>
+    <label for="apotema">Apotema (opcional):</label>
+    <input type="number" id="apotema" step="0.1">
+    <br>
+    <label for="cx">Coordenada x del centro:</label>
+    <input type="number" id="cx" value="150">
+    <br>
+    <label for="cy">Coordenada y del centro:</label>
+    <input type="number" id="cy" value="150">
+    <br><br>
+    <button onclick="drawPolygon()">Dibujar Polígono</button>
+    <br><br>
+    <canvas id="canvas" width="300" height="300"></canvas>
+
     <script>
         class Cartesiana {
             constructor(x, y) {
@@ -64,4 +85,29 @@
             return v;
         }
 
+        function drawPolygon() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const n = parseInt(document.getElementById('nLados').value);
+            const L = parseFloat(document.getElementById('lado').value);
+            const cx = parseFloat(document.getElementById('cx').value);
+            const cy = parseFloat(document.getElementById('cy').value);
 
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const vertices = polygon(n, L, cx, cy);
+
+            ctx.beginPath();
+            const firstVertice = vertices[0].getVertice();
+            ctx.moveTo(firstVertice.getX(), firstVertice.getY());
+
+            for (let i = 1; i < vertices.length; i++) {
+                const vertice = vertices[i].getVertice();
+                ctx.lineTo(vertice.getX(), vertice.getY());
+            }
+
+            ctx.closePath();
+            ctx.stroke();
+        }
+    </script>
+</body>
+</html>
