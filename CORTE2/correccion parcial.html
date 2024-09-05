@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+
     <script>
         class Cartesiana {
             constructor(x, y) {
@@ -33,3 +33,35 @@
                 return this.cartesiana;
             }
         }
+
+        function cart2polar(x, y) {
+            return [Math.sqrt(x * x + y * y), Math.atan2(y, x)];
+        }
+
+        function polar2cart(r, a) {
+            return [r * Math.cos(a), r * Math.sin(a)];
+        }
+
+        function piRad(d) {
+            return d < 1 ? "π/" + Math.PI / d : d / Math.PI + "π";
+        }
+
+        function rot(pxy, ar) {
+            const cp = cart2polar(pxy[0], pxy[1]);
+            cp[1] += ar;
+            return polar2cart(cp[0], cp[1]);
+        }
+
+        function polygon(n, L, cx, cy) {
+            const v = [];
+            const a = 2 * Math.PI / n;
+            const ap = L / (2 * Math.tan(a / 2));
+            const p = [cx + L / 2, cy + ap];
+            for (let i = 0; i < n; i++) {
+                const [x, y] = rot(p, i * a);
+                v.push(new Vertice(new Cartesiana(x, y)));
+            }
+            return v;
+        }
+
+
