@@ -1,0 +1,54 @@
+parte html
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Línea</title>
+</head>
+<body>
+    <canvas id="miCanvas" width="500" height="400" style="border:1px solid #000;"></canvas>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+partejava script
+
+// Obtener el elemento canvas y el contexto de renderizado 2D
+const canvas = document.getElementById('miCanvas');
+const contexto = canvas.getContext('2d');
+
+/**
+ * Dibuja una línea en el canvas con un origen especificado.
+ * @param {number} x_1 - Coordenada x del punto inicial.
+ * @param {number} y_1 - Coordenada y del punto inicial.
+ * @param {number} x_2 - Coordenada x del punto final.
+ * @param {number} y_2 - Coordenada y del punto final.
+ * @param {number} origenX - Coordenada x del origen del canvas.
+ * @param {number} origenY - Coordenada y del origen del canvas.
+ */
+function linea(x_1, y_1, x_2, y_2, origenX = 0, origenY = 0) {
+    // Ajustar coordenadas en función del origen
+    const ajustadoX1 = x_1 + origenX;
+    const ajustadoY1 = y_1 + origenY;
+    const ajustadoX2 = x_2 + origenX;
+    const ajustadoY2 = y_2 + origenY;
+    
+    // Comenzar a dibujar la línea
+    contexto.beginPath(); // Iniciar un nuevo camino
+    contexto.moveTo(ajustadoX1, ajustadoY1); // Mover el lápiz al punto de inicio
+    contexto.lineTo(ajustadoX2, ajustadoY2); // Dibujar una línea hasta el punto de fin
+    contexto.stroke(); // Aplicar el trazo
+}
+
+// Especificar el origen (0, 0) para la demostración
+const origenX = 100; // Ejemplo de origen X
+const origenY = 100; // Ejemplo de origen Y
+
+// Ejemplos de llamadas a la función
+linea(0, 0, 200, 0, origenX, origenY); // Línea horizontal desde el origen
+linea(200, 0, 200, 200, origenX, origenY); // Línea vertical desde el final de la primera línea
+linea(200, 200, 0, 200, origenX, origenY); // Línea horizontal que cierra el triángulo
