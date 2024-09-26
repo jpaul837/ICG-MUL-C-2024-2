@@ -1,0 +1,85 @@
+class Primitiva {
+    constructor(svgCanvas) {
+        this.svgCanvas = svgCanvas;
+    }
+
+    agregarAlCanvas(elemento) {
+        this.svgCanvas.appendChild(elemento);
+    }
+}
+
+class Linea extends Primitiva {
+    constructor(x1, y1, x2, y2, svgCanvas) {
+        super(svgCanvas);
+        this._x1 = x1;
+        this._y1 = y1;
+        this._x2 = x2;
+        this._y2 = y2;
+    }
+
+    dibujar() {
+        const linea = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        linea.setAttribute('x1', this._x1);
+        linea.setAttribute('y1', this._y1);
+        linea.setAttribute('x2', this._x2);
+        linea.setAttribute('y2', this._y2);
+        linea.setAttribute('stroke', 'black');
+        linea.setAttribute('stroke-width', '2');
+        this.agregarAlCanvas(linea);
+    }
+}
+
+class Circunferencia extends Primitiva {
+    constructor(cx, cy, radio, svgCanvas) {
+        super(svgCanvas);
+        this._cx = cx;
+        this._cy = cy;
+        this._radio = radio;
+    }
+
+    dibujar() {
+        const circunferencia = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circunferencia.setAttribute('cx', this._cx);
+        circunferencia.setAttribute('cy', this._cy);
+        circunferencia.setAttribute('r', this._radio);
+        circunferencia.setAttribute('stroke', 'black');
+        circunferencia.setAttribute('stroke-width', '2');
+        circunferencia.setAttribute('fill', 'none');
+        this.agregarAlCanvas(circunferencia);
+    }
+}
+
+class Elipse extends Primitiva {
+    constructor(cx, cy, rx, ry, svgCanvas) {
+        super(svgCanvas);
+        this._cx = cx;
+        this._cy = cy;
+        this._rx = rx;
+        this._ry = ry;
+    }
+
+    dibujar() {
+        const elipse = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        elipse.setAttribute('cx', this._cx);
+        elipse.setAttribute('cy', this._cy);
+        elipse.setAttribute('rx', this._rx);
+        elipse.setAttribute('ry', this._ry);
+        elipse.setAttribute('stroke', 'black');
+        elipse.setAttribute('stroke-width', '2');
+        elipse.setAttribute('fill', 'none');
+        this.agregarAlCanvas(elipse);
+    }
+}
+
+// Instancia el SVG
+const svgCanvas = document.getElementById('svgCanvas');
+
+// Dibuja las primitivas
+const linea = new Linea(50, 50, 200, 200, svgCanvas);
+linea.dibujar();
+
+const circunferencia = new Circunferencia(300, 100, 50, svgCanvas);
+circunferencia.dibujar();
+
+const elipse = new Elipse(400, 300, 80, 50, svgCanvas);
+elipse.dibujar();
