@@ -1,0 +1,143 @@
+// Clase Punto con atributos encapsulados
+class Punto {
+    #x;
+    #y;
+
+    constructor(x, y) {
+        this.#x = x;
+        this.#y = y;
+    }
+
+    // Getters para obtener las coordenadas del punto
+    get x() {
+        return this.#x;
+    }
+
+    get y() {
+        return this.#y;
+    }
+}
+
+// Clase base Primitiva con el canvas SVG como atributo
+class Primitiva {
+    #svgCanvas;
+
+    constructor(svgCanvas) {
+        this.#svgCanvas = svgCanvas;
+    }
+
+    agregarAlCanvas(elemento) {
+        this.#svgCanvas.appendChild(elemento);
+    }
+}
+
+// Clase Linea que implementa el algoritmo de Bresenham
+class Linea extends Primitiva {
+    #puntoInicio;
+    #puntoFin;
+
+    constructor(puntoInicio, puntoFin, svgCanvas) {
+        super(svgCanvas);
+        this.#puntoInicio = puntoInicio;
+        this.#puntoFin = puntoFin;
+    }
+
+    dibujar() {
+        // Algoritmo de Bresenham para calcular los puntos de la línea
+        let x1 = this.#puntoInicio.x;
+        let y1 = this.#puntoInicio.y;
+        let x2 = this.#puntoFin.x;
+        let y2 = this.#puntoFin.y;
+
+        let dx = Math.abs(x2 - x1);
+        let dy = Math.abs(y2 - y1);
+        let sx = (x1 < x2) ? 1 : -1;
+        let sy = (y1 < y2) ? 1 : -1;
+        let err = dx - dy;
+
+        while (true) {
+            // Crear un pequeño segmento en el SVG para cada punto calculado por Bresenham
+            const punto = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            punto.setAttribute('x', x1);
+            punto.setAttribute('y', y1);
+            punto.setAttribute('width', '1');
+            punto.setAttribute('height', '1');
+            punto.setAttribute('fill', 'black');
+            this.agregarAlCanvas(punto);
+
+            if (x1 === x2 && y1 === y2) break;
+
+            const e2 = 2 * err;
+            if (e2 > -dy) {
+                err -= dy;
+                x1 += sx;
+            }
+            if (e2 < dx) {
+                err += dx;
+                y1 += sy;
+            }
+        }
+    }
+}
+
+// Clase Circunferencia con punto central encapsulado
+class Circunferencia extends Primitiva {
+    #centro;
+    #radio;
+
+    constructor(centro, radio, svgCanvas) {
+        super(svgCanvas);
+        this.#centro = centro;
+        this.#radio = radio;
+    }
+
+    dibujar() {
+        const circunferencia = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circunferencia.setAttribute('cx', this.#centro.x);
+        circunferencia.setAttribute('cy', this.#centro.y);
+        circunferencia.setAttribute('r', this.#radio);
+        circunferencia.setAttribute('stroke', 'black');
+        circunferencia.setAttribute('stroke-width', '2');
+        circunferencia.setAttribute('fill', 'none');
+        this.agregarAlCanvas(circunferencia);
+    }
+}
+
+// Clase Elipse con punto central encapsulado
+class Elipse extends Primitiva {
+    #centro;
+    #rx;
+    #ry;
+
+    constructor(centro, rx, ry, svgCanvas) {
+        super(svgCanvas);
+        this.#centro = centro;
+        this.#rx = rx;
+        this.#ry = ry;
+    }
+
+    dibujar() {
+        const elipse = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        elipse.setAttribute('cx', this.#centro.x);
+        elipse.setAttribute('cy', this.#centro.y);
+        elipse.setAttribute('rx', this.#rx);
+        elipse.setAttribute('ry', this.#ry);
+        elipse.setAttribute('stroke', 'black');
+        elipse.setAttribute('stroke-width', '2');
+        elipse.setAttribute('fill', 'none');
+        this.agregarAlCanvas(elipse);
+    }
+}
+
+// Instancia del SVG
+const svgCanvas = document.getElementById('svgCanvas');
+
+// Dibuja las primitivas utilizando puntos encapsulados
+const linea = new Linea(new Punto(50, 50), new Punto(200, 200), svgCanvas);
+linea.dibujar();
+
+const circunferencia = new Circunferencia(new Punto(300, 100), 50, svgCanvas);
+circunferencia.dibujar();
+
+const elipse = new Elipse(new Punto(400, 300), 80, 50, svgCanvas);
+elipse.dibujar();
