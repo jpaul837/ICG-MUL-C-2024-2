@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Polígono en Formato Vectorizado</title>
+    <title>Polígono en Formato Rasterizado</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,12 +13,12 @@
             margin-top: 20px;
         }
 
-        svg {
+        canvas {
             border: 1px solid black;
         }
     </style>
 </head>
-<body onload="iniciarDibujoSVG()">
-    <svg id="miSVG" width="500" height="500"></svg>
+<body onload="iniciarDibujo()">
+    <canvas id="miCanvas" width="500" height="500"></canvas>
 </body>
 </html>

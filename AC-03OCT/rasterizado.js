@@ -3,6 +3,14 @@ class Punto {
         this.x = x;
         this.y = y;
     }
+
+    dibujar(contexto) {
+        contexto.beginPath();
+        contexto.arc(this.x, this.y, 3, 0, 2 * Math.PI);
+        contexto.fillStyle = 'black';
+        contexto.fill();
+        contexto.closePath();
+    }
 }
 
 class Poligono {
@@ -19,27 +27,24 @@ class Poligono {
         }
     }
 
-    dibujarSVG(svgElement) {
+    dibujar(contexto) {
         if (this.puntos.length < 2) return;
 
-        const puntosSVG = this.puntos.map(punto => `${punto.x},${punto.y}`).join(" ");
+        contexto.beginPath();
+        contexto.moveTo(this.puntos[0].x, this.puntos[0].y);
 
-        const poligonoSVG = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-        poligonoSVG.setAttribute("points", puntosSVG);
-        poligonoSVG.setAttribute("stroke", "blue");
-        poligonoSVG.setAttribute("stroke-width", "2");
-        poligonoSVG.setAttribute("fill", "none");
+        for (let i = 1; i < this.puntos.length; i++) {
+            contexto.lineTo(this.puntos[i].x, this.puntos[i].y);
+        }
 
-        svgElement.appendChild(poligonoSVG);
+        contexto.lineTo(this.puntos[0].x, this.puntos[0].y);
+        contexto.strokeStyle = 'blue';
+        contexto.lineWidth = 2;
+        contexto.stroke();
+        contexto.closePath();
 
         for (let punto of this.puntos) {
-            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            circle.setAttribute("cx", punto.x);
-            circle.setAttribute("cy", punto.y);
-            circle.setAttribute("r", "3");
-            circle.setAttribute("fill", "black");
-
-            svgElement.appendChild(circle);
+            punto.dibujar(contexto);
         }
     }
 
@@ -69,22 +74,19 @@ class Poligono {
     }
 }
 
-function iniciarDibujoSVG() {
-    const svgElement = document.getElementById('miSVG');
-    const ancho = svgElement.clientWidth;
-    const alto = svgElement.clientHeight;
+function iniciarDibujo() {
+    const canvas = document.getElementById('miCanvas');
+    const contexto = canvas.getContext('2d');
+    const ancho = canvas.width;
+    const alto = canvas.height;
 
     const poligono = new Poligono();
     poligono.generarPuntosAleatorios(2, 10, ancho, alto);
 
-    poligono.dibujarSVG(svgElement);
+    poligono.dibujar(contexto);
 
     const tipo = poligono.esConcavo() ? "cóncavo" : "convexo";
-    const texto = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    texto.setAttribute("x", 10);
-    texto.setAttribute("y", 20);
-    texto.setAttribute("fill", "black");
-    texto.textContent = `El polígono es ${tipo}`;
-
-    svgElement.appendChild(texto);
+    contexto.font = "16px Arial";
+    contexto.fillStyle = "black";
+    contexto.fillText(`El polígono es ${tipo}`, 10, 20);
 }
